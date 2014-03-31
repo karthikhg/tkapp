@@ -1,0 +1,65 @@
+<h1>
+  <%= @test1 %>
+</h1>
+<div class="table-responsive">
+<table class="table table-hover">
+  <thead class="table head">
+    <th>
+      Symbol
+    </th>
+    <th>
+      Quantity
+    </th>
+    <th>
+      Trading at
+    </th>
+    <th>
+      Cost Basis
+    </th>
+    <th>
+      Market Value
+    </th>
+    <th>
+      Gain/Loss
+    </th>
+  </thead>
+  <tbody>
+    <% @holdings.each do |holding| %>
+      <tr onclick="display_chart(<%= holding.to_json %>)">
+        <td>
+          <%= holding["displaydata"]["symbol"] %>
+        </td>
+        <td>
+          <%= holding["displaydata"]["qty"] %>
+        </td>
+        <td>
+          <%= holding["displaydata"]["lastprice"] %>
+        </td>
+        <td>
+          <%= holding["displaydata"]["costbasis"] %>
+        </td>
+        <td>
+          <%= holding["displaydata"]["marketvalue"] %>
+        </td>
+        <td class="<%= red_or_green(holding["gainloss"])%>">
+          <%= number_with_precision(holding["gainloss"].to_d, precision: 2) %>
+        </td>
+      </tr>
+    <% end %>
+    <tr class="totals">
+      <td>Total</td>
+      <td></td>
+      <td></td>
+      <td>
+        <%= total_cost_basis(@holdings) %>
+      </td>
+      <td>
+        <%= total_market_value(@holdings) %>
+      </td>
+      <td class="<%= red_or_green(total_gain_loss(@holdings))%>">
+        <%= total_gain_loss(@holdings) %>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
